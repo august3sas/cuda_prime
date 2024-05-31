@@ -41,19 +41,16 @@ int main(int argc, char *argv[]) {
     cudaMalloc((void**)&dev_result, sizeof(bool));
     cudaMemcpy(dev_result, &result, sizeof(bool), cudaMemcpyHostToDevice);
 
-    int blocks = 65535; // Maximum number of blocks
+    int blocks = 65535;
 
-    // Create CUDA events for timing
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
 
-    // Record the start event
     cudaEventRecord(start, NULL);
 
     isPrimeKernel<<<blocks, THREADS_PER_BLOCK>>>(number, dev_result);
 
-    // Record the stop event
     cudaEventRecord(stop, NULL);
     cudaEventSynchronize(stop);
     float milliseconds = 0;
@@ -66,7 +63,6 @@ int main(int argc, char *argv[]) {
     } else {
         printf("%llu is not prime\n", number);
     }
-    // Print the elapsed time
     printf("%f\n", milliseconds);
     cudaFree(dev_result);
 

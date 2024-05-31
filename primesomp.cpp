@@ -27,15 +27,17 @@ int main() {
     std::vector<int> ends = {1, 3, 7, 9};
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::ofstream file("omp_times.csv"); // Open a file for output
-    file << "Order of Magnitude,Average Time\n"; // Write the header
+    std::ofstream file("omp_times.csv");
+    file << "Order of Magnitude,Average Time\n";
 
     for (int order = 3; order <= 18; order++) {
         unsigned long long int lower = 1;
         for (int i = 0; i < order; i++) {
             lower *= 10;
         }
-        unsigned long long int upper = lower * 10 - 1;
+        unsigned long long int upper;
+        if(order == 19) upper = ULLONG_MAX;
+        else upper = lower * 10 - 1;
 
         std::uniform_int_distribution<unsigned long long int> distrib(lower, upper);
         std::vector<unsigned long long int> numbers;
@@ -62,7 +64,7 @@ int main() {
 
         double average_time = std::accumulate(times.begin(), times.end(), 0.0) / times.size();
         std::cout << "Order of magnitude: " << order << ", Average time: " << average_time << " ms\n";
-        file << order << "," << average_time << "\n"; // Write the data to the file
+        file << order << "," << average_time << "\n";
 
     }
     file.close();

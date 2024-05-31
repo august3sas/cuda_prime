@@ -6,17 +6,18 @@ import random
 
 numbers = []
 orders_of_magnitude = []
-for i in range(3, 18):
+for i in range(3, 19):
     min_val = 10 ** i
     max_val = 10 ** (i + 1)
     for _ in range(100):
         while True:
             num = random.randrange(min_val, max_val)
-            if num % 2 != 0 and str(num)[-1] in ['1', '3', '7', '9']:
+            if num % 2 != 0 and str(num)[-1] in ['1', '3', '7', '9'] and num <= 18446744073709551615:
                 numbers.append(num)
                 orders_of_magnitude.append(i)
                 break
 
+print(numbers)
 
 with open('cuda_times.csv', 'w', newline='') as file:
     writer = csv.writer(file)
